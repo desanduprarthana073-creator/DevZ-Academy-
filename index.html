@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090613">
+<title>DEVZ ACADEMY | Student Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+ --bg:#090613;--purple:#9b5cff;--pink:#d15cff;
+ --text:#fff;--muted:#aaa2b8;--border:#ffffff15;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;background:var(--bg);
+ color:var(--text);font-family:Inter,sans-serif;overflow-x:hidden
+}
+body:before,body:after{
+ content:"";position:fixed;width:350px;height:350px;
+ border-radius:50%;filter:blur(120px);opacity:.22;
+ pointer-events:none;z-index:-1
+}
+body:before{background:#7c35ff;top:-130px;left:-100px}
+body:after{background:#d12cff;bottom:-150px;right:-100px}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.app{max-width:1400px;margin:auto;padding:20px}
+.topbar{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:15px;padding:17px 22px;border:1px solid var(--border);
+ border-radius:20px;background:#ffffff09;backdrop-filter:blur(25px);
+ position:sticky;top:10px;z-index:20
+}
+.logo{font-family:Orbitron,sans-serif;font-weight:800;font-size:19px;letter-spacing:1px}
+.logo span{color:#bd8aff}
+.status{font-size:11px;color:#a9f4c5}
+.glass{
+ background:linear-gradient(140deg,#ffffff12,#ffffff05);
+ border:1px solid var(--border);border-radius:22px;
+ backdrop-filter:blur(22px);box-shadow:0 15px 50px #0005
+}
+.auth{max-width:460px;margin:65px auto;padding:32px}
+.tag{font-family:Orbitron,sans-serif;color:#c49aff;font-size:10px;letter-spacing:2px;font-weight:700}
+h1{font-size:29px;margin:12px 0}
+h2{font-size:20px;margin:0 0 18px}
+h3{font-size:17px}
+p{color:var(--muted);line-height:1.7;font-size:13px}
+.field{margin:18px 0}
+label{display:block;font-size:12px;color:#c5bdd2;margin-bottom:9px}
+input{
+ width:100%;padding:15px;background:#080611;
+ border:1px solid #ffffff20;border-radius:12px;color:white;outline:none
+}
+input:focus{border-color:var(--purple);box-shadow:0 0 15px #9b5cff35}
+.btn{
+ border:0;border-radius:12px;padding:14px 18px;color:white;
+ font-weight:800;background:linear-gradient(100deg,#7435e9,#bb55ed);
+ box-shadow:0 0 22px #974cff40;transition:.25s
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.full{width:100%;margin-top:8px}
+.btn2{border:1px solid #ffffff20;background:#ffffff09;color:white;border-radius:11px;padding:11px 15px}
+.link{color:#c59aff;cursor:pointer;font-size:12px}
+.message{font-size:12px;margin-top:15px;line-height:1.6;overflow-wrap:anywhere}
+.auth-footer{text-align:center;margin-top:20px}
+.layout{display:grid;grid-template-columns:235px 1fr;gap:22px;margin-top:24px}
+.sidebar{padding:20px;height:max-content;position:sticky;top:105px}
+.side-label{font-size:10px;color:#82798f;letter-spacing:2px;margin:12px 10px}
+.navbtn{
+ display:flex;align-items:center;gap:13px;width:100%;padding:14px;
+ margin:5px 0;background:transparent;border:1px solid transparent;
+ color:#bdb4ca;border-radius:12px;text-align:left;font-size:13px;font-weight:600
+}
+.navbtn:hover,.navbtn.active{color:white;background:#a15cff20;border-color:#a15cff55}
+.navbtn .ico{font-size:18px;width:22px}
+.content{min-width:0}
+.hero{padding:30px;position:relative;overflow:hidden}
+.hero h1{font-family:Orbitron,sans-serif;font-size:clamp(22px,4vw,34px);text-shadow:0 0 18px #a65cff75}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:18px}
+.stat{padding:21px;min-width:0}
+.stat-icon{font-size:23px}
+.stat small{display:block;color:#aaa;font-size:10px;margin-top:13px}
+.stat strong{display:block;margin-top:8px;font-size:17px;overflow-wrap:anywhere}
+.section{margin-top:20px;padding:25px}
+.item{padding:17px;margin-top:10px;background:#ffffff08;border:1px solid #ffffff12;border-radius:13px;overflow-wrap:anywhere}
+.course-card{
+ padding:25px;border:1px solid #a15cff55;border-radius:18px;
+ background:linear-gradient(130deg,#9b5cff20,#d15cff09)
+}
+.course-icon{font-size:35px}
+.pill{display:inline-block;padding:7px 11px;background:#9b5cff20;color:#cbaaff;border-radius:30px;font-size:10px;font-weight:700}
+.empty{text-align:center;padding:40px 20px;border:1px dashed #ffffff25;border-radius:17px}
+.empty .big{font-size:35px}
+.page{animation:appear .35s ease}
+@keyframes appear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.mobile-nav{display:none}
+.footer{text-align:center;color:#655c73;font-size:10px;padding:30px 0;letter-spacing:1px}
+
+/* LESSON CARDS */
+.lesson-card{
+ padding:20px;margin-top:14px;border-radius:17px;
+ background:linear-gradient(140deg,#ffffff10,#ffffff05);
+ border:1px solid #a15cff35;
+}
+.lesson-card h3{margin:10px 0 5px;font-size:16px}
+.lesson-card p{margin:8px 0 15px}
+.lesson-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.lesson-link{
+ display:inline-flex;align-items:center;gap:7px;
+ padding:11px 15px;border-radius:10px;text-decoration:none;
+ color:white;font-size:12px;font-weight:700;
+ background:linear-gradient(100deg,#7435e9,#bb55ed);
+}
+.lesson-link.pdf{background:#ffffff12;border:1px solid #ffffff25}
+.lesson-number{
+ display:inline-block;padding:6px 10px;border-radius:20px;
+ background:#9b5cff20;color:#d4baff;font-size:10px;font-weight:700;
+}
+.lesson-count{color:#a9f4c5;font-size:11px;margin-top:10px}
+
+@media(max-width:850px){
+ .layout{grid-template-columns:1fr}
+ .sidebar{display:none}
+ .mobile-nav{
+  display:flex;position:fixed;bottom:10px;left:10px;right:10px;
+  z-index:30;padding:8px;gap:4px;justify-content:space-around;
+  background:#171025ed;border:1px solid #ffffff20;border-radius:17px;
+  backdrop-filter:blur(25px)
+ }
+ .mobile-nav .navbtn{display:flex;flex-direction:column;gap:4px;padding:9px 4px;margin:0;text-align:center;font-size:9px}
+ .mobile-nav .ico{font-size:18px}
+ .footer{padding-bottom:90px}
+}
+@media(max-width:550px){
+ .app{padding:11px}.topbar{padding:14px}.logo{font-size:15px}
+ .auth{margin:35px auto;padding:23px}
+ .hero{padding:23px}.stats{grid-template-columns:1fr}
+ .stat{padding:17px}.section{padding:19px}
+ .top-right .status{display:none}
+ .lesson-card{padding:16px}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header class="topbar">
+ <div class="logo">DEVZ <span>ACADEMY</span></div>
+ <div class="top-right">
+  <span class="status">● STUDENT PORTAL</span>
+  <button id="logoutBtn" class="btn2 hidden">Logout ↗</button>
+ </div>
+</header>
+
+<section id="loginPage" class="glass auth">
+ <div class="tag">STUDENT ACCESS / 01</div>
+ <h1>Welcome Back.</h1>
+ <p>Sign in to continue your learning journey.</p>
+ <div class="field"><label>STUDENT ID</label><input id="loginId" placeholder="DEVZ-1001"></div>
+ <div class="field"><label>EMAIL ADDRESS</label><input id="loginEmail" type="email" placeholder="your@email.com"></div>
+ <div class="field"><label>PASSWORD</label><input id="loginPassword" type="password" placeholder="Enter password"></div>
+ <button id="loginBtn" class="btn full">SIGN IN →</button>
+ <p><span class="link" id="forgotBtn">Forgot Password?</span></p>
+ <div class="auth-footer"><p>New student? <span class="link" id="showRegister">Create Account</span></p></div>
+ <div id="loginMsg" class="message"></div>
+</section>
+
+<section id="registerPage" class="glass auth hidden">
+ <div class="tag">CREATE YOUR ACCOUNT / 02</div>
+ <h1>Join DEVZ.</h1>
+ <p>Use the Student ID and Email registered by your Admin.</p>
+ <div class="field"><label>STUDENT ID</label><input id="regId" placeholder="DEVZ-1001"></div>
+ <div class="field"><label>EMAIL ADDRESS</label><input id="regEmail" type="email" placeholder="your@email.com"></div>
+ <div class="field"><label>CREATE PASSWORD</label><input id="regPassword" type="password" placeholder="Minimum 6 characters"></div>
+ <button id="registerBtn" class="btn full">CREATE ACCOUNT →</button>
+ <div class="auth-footer"><p>Already have an account? <span class="link" id="showLogin">Sign In</span></p></div>
+ <div id="registerMsg" class="message"></div>
+</section>
+
+<section id="dashboard" class="hidden page">
+<div class="layout">
+
+<aside class="glass sidebar">
+ <div class="side-label">MAIN MENU</div>
+ <button class="navbtn active" data-page="home"><span class="ico">⌂</span> Dashboard</button>
+ <button class="navbtn" data-page="profile"><span class="ico">♙</span> My Profile</button>
+ <button class="navbtn" data-page="course"><span class="ico">▣</span> My Course</button>
+ <button class="navbtn" data-page="lessons"><span class="ico">▷</span> Lessons</button>
+ <button class="navbtn" data-page="payments"><span class="ico">◇</span> Payments</button>
+ <div class="side-label">ACCOUNT</div>
+ <button class="navbtn" id="sideLogout"><span class="ico">↗</span> Logout</button>
+</aside>
+
+<main class="content">
+
+<div id="homePage" class="page">
+ <div class="glass hero">
+  <div class="tag">YOUR LEARNING SPACE</div>
+  <h1 id="welcome">Welcome, Student.</h1>
+  <p>Your future starts with what you learn today.</p>
+  <span class="pill">✦ VERIFIED STUDENT</span>
+ </div>
+ <div class="stats">
+  <div class="glass stat"><div class="stat-icon">♙</div><small>STUDENT ID</small><strong id="studentId">—</strong></div>
+  <div class="glass stat"><div class="stat-icon">▣</div><small>MY COURSE</small><strong id="courseName">—</strong></div>
+  <div class="glass stat"><div class="stat-icon">✦</div><small>ACCOUNT STATUS</small><strong style="color:#9ef2c3">Verified</strong></div>
+ </div>
+ <div class="glass section">
+  <div class="tag">QUICK ACCESS</div><h2 style="margin-top:10px">Continue Learning</h2>
+  <div class="course-card">
+   <div class="course-icon">🎓</div>
+   <h3 id="homeCourse">Your Course</h3>
+   <p>Your assigned course information is available here.</p>
+   <button class="btn" data-go="course">VIEW COURSE →</button>
+  </div>
+ </div>
+</div>
+
+<div id="profilePage" class="glass section page hidden">
+ <div class="tag">PERSONAL INFORMATION</div><h2 style="margin-top:10px">My Profile</h2>
+ <div class="item">FULL NAME<br><strong id="studentName">—</strong></div>
+ <div class="item">EMAIL ADDRESS<br><strong id="studentEmail">—</strong></div>
+ <div class="item">STUDENT ID<br><strong id="profileId">—</strong></div>
+ <div class="item">ACCOUNT STATUS<br><strong style="color:#9ef2c3">Verified</strong></div>
+ <div class="item">REGISTERED COURSE<br><strong id="profileCourse">—</strong></div>
+ <div class="item">PHONE<br><strong id="studentPhone">—</strong></div>
+</div>
+
+<div id="coursePage" class="glass section page hidden">
+ <div class="tag">YOUR LEARNING PROGRAM</div><h2 style="margin-top:10px">My Course</h2>
+ <div class="course-card">
+  <div class="course-icon">🎓</div><span class="pill">ASSIGNED COURSE</span>
+  <h2 id="courseTitle" style="margin-top:15px">No course assigned</h2>
+  <p id="courseDescription">Your course details will appear here.</p>
+ </div>
+</div>
+
+<!-- CONNECTED LESSONS PAGE -->
+<div id="lessonsPage" class="glass section page hidden">
+ <div class="tag">LEARNING CENTER</div>
+ <h2 style="margin-top:10px">My Lessons</h2>
+ <p>Lessons and learning materials for your assigned course.</p>
+ <div class="lesson-count" id="lessonCount"></div>
+ <div id="lessonsList">
+  <div class="empty">
+   <div class="big">📚</div>
+   <h3>Loading Lessons...</h3>
+   <p>Your learning materials will appear here.</p>
+  </div>
+ </div>
+</div>
+
+<div id="paymentsPage" class="glass section page hidden">
+ <div class="tag">ACCOUNT & BILLING</div><h2 style="margin-top:10px">My Payments</h2>
+ <div id="paymentList">
+  <div class="empty"><div class="big">◇</div><h3>Payment Information</h3><p>Payment access has not been connected yet.</p></div>
+ </div>
+</div>
+
+</main>
+</div>
+
+<nav class="mobile-nav">
+ <button class="navbtn active" data-page="home"><span class="ico">⌂</span>Home</button>
+ <button class="navbtn" data-page="profile"><span class="ico">♙</span>Profile</button>
+ <button class="navbtn" data-page="course"><span class="ico">▣</span>Course</button>
+ <button class="navbtn" data-page="lessons"><span class="ico">▷</span>Lessons</button>
+ <button class="navbtn" data-page="payments"><span class="ico">◇</span>Payments</button>
+</nav>
+</section>
+
+<div class="footer">DEVZ ACADEMY • LEARN. CREATE. BUILD.</div>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+
+import {
+ getAuth,onAuthStateChanged,signInWithEmailAndPassword,
+ createUserWithEmailAndPassword,sendEmailVerification,
+ sendPasswordResetEmail,signOut
+} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
+
+import {
+ getFirestore,collection,query,where,getDocs
+} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyBKg28bMfUzMXX0zpA-nV8kOjaJ_JLyjbk",
+ authDomain:"devz-869b5.firebaseapp.com",
+ projectId:"devz-869b5",
+ storageBucket:"devz-869b5.firebasestorage.app",
+ messagingSenderId:"1026087949810",
+ appId:"1:1026087949810:web:a0de7d61fc11093c55076b",
+ measurementId:"G-ZM2SW9ZTF2"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const $=id=>document.getElementById(id);
+
+function message(id,text,error=false){
+ $(id).textContent=text;
+ $(id).style.color=error?"#ff8da5":"#a9f4c5";
+}
+
+function page(name){
+ ["loginPage","registerPage","dashboard"].forEach(id=>{
+  $(id).classList.toggle("hidden",id!==name);
+ });
+ $("logoutBtn").classList.toggle("hidden",name!=="dashboard");
+}
+
+function tab(name){
+ ["home","profile","course","lessons","payments"].forEach(p=>{
+  $(p+"Page").classList.toggle("hidden",p!==name);
+ });
+ document.querySelectorAll("[data-page]").forEach(b=>{
+  b.classList.toggle("active",b.dataset.page===name);
+ });
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.querySelectorAll("[data-page]").forEach(b=>{
+ b.addEventListener("click",()=>tab(b.dataset.page));
+});
+document.querySelectorAll("[data-go]").forEach(b=>{
+ b.addEventListener("click",()=>tab(b.dataset.go));
+});
+
+$("showRegister").onclick=()=>page("registerPage");
+$("showLogin").onclick=()=>page("loginPage");
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,char=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[char]));
+}
+
+function validWebURL(value){
+ try{
+  const url=new URL(value);
+  if(url.protocol==="https:"||url.protocol==="http:")return url.href;
+ }catch(e){}
+ return "";
+}
+
+// REGISTRATION
+$("registerBtn").onclick=async()=>{
+ const id=$("regId").value.trim().toUpperCase();
+ const email=$("regEmail").value.trim().toLowerCase();
+ const password=$("regPassword").value;
+
+ if(!id||!email||!password){
+  message("registerMsg","Please complete all fields.",true);return;
+ }
+ if(!/^DEVZ-\d+$/i.test(id)){
+  message("registerMsg","Invalid Student ID format.",true);return;
+ }
+ if(password.length<6){
+  message("registerMsg","Password must be at least 6 characters.",true);return;
+ }
+
+ $("registerBtn").disabled=true;
+ $("registerBtn").textContent="CREATING ACCOUNT...";
+
+ try{
+  const result=await createUserWithEmailAndPassword(auth,email,password);
+  await sendEmailVerification(result.user);
+  await signOut(auth);
+  $("loginId").value=id;
+  $("loginEmail").value=email;
+  page("loginPage");
+  message("loginMsg","Account created! Please verify your email using the link sent to your inbox.");
+ }catch(e){
+  message("registerMsg",e.message,true);
+ }finally{
+  $("registerBtn").disabled=false;
+  $("registerBtn").textContent="CREATE ACCOUNT →";
+ }
+};
+
+// LOAD LESSONS FOR THE STUDENT'S COURSE
+async function loadStudentLessons(course){
+ const list=$("lessonsList");
+ const count=$("lessonCount");
+
+ list.innerHTML=`
+  <div class="empty">
+   <div class="big">⏳</div>
+   <h3>Loading Lessons...</h3>
+   <p>Please wait while we load your learning materials.</p>
+  </div>`;
+ count.textContent="";
+
+ if(!course){
+  list.innerHTML=`
+   <div class="empty">
+    <div class="big">📚</div>
+    <h3>No Course Assigned</h3>
+    <p>Please contact your academy administrator.</p>
+   </div>`;
+  return;
+ }
+
+ try{
+  const lessonQuery=query(
+   collection(db,"lessons"),
+   where("course","==",course)
+  );
+
+  const result=await getDocs(lessonQuery);
+
+  if(result.empty){
+   list.innerHTML=`
+    <div class="empty">
+     <div class="big">📖</div>
+     <h3>No Lessons Yet</h3>
+     <p>Your teacher has not published lessons for ${escapeHTML(course)} yet. Please check again later.</p>
+    </div>`;
+   count.textContent="0 lessons available";
+   return;
+  }
+
+  const lessons=result.docs.map(d=>d.data());
+
+  lessons.sort((a,b)=>{
+   const timeA=a.createdAt?.toMillis?.()||0;
+   const timeB=b.createdAt?.toMillis?.()||0;
+   return timeA-timeB;
+  });
+
+  count.textContent=lessons.length+" lesson"+(lessons.length===1?"":"s")+" available";
+
+  list.innerHTML=lessons.map((lesson,index)=>{
+   const videoUrl=validWebURL(lesson.videoUrl||"");
+   const pdfUrl=validWebURL(lesson.pdfUrl||"");
+
+   return `
+    <article class="lesson-card">
+     <span class="lesson-number">LESSON ${index+1}</span>
+     <h3>${escapeHTML(lesson.title||"Untitled Lesson")}</h3>
+     <p>${escapeHTML(lesson.description||"No description provided.")}</p>
+
+     <div class="lesson-actions">
+      ${videoUrl?`
+       <a class="lesson-link" href="${escapeHTML(videoUrl)}" target="_blank" rel="noopener noreferrer">
+        ▶ WATCH VIDEO
+       </a>`:""}
+
+      ${pdfUrl?`
+       <a class="lesson-link pdf" href="${escapeHTML(pdfUrl)}" target="_blank" rel="noopener noreferrer">
+        ↓ OPEN PDF NOTES
+       </a>`:""}
+     </div>
+    </article>`;
+  }).join("");
+
+ }catch(error){
+  console.error("Lesson loading error:",error);
+  list.innerHTML=`
+   <div class="empty">
+    <div class="big">⚠️</div>
+    <h3>Unable to Load Lessons</h3>
+    <p>${escapeHTML(error.message)}</p>
+    <p>Please contact your academy administrator.</p>
+   </div>`;
+  count.textContent="";
+ }
+}
+
+// LOAD STUDENT PROFILE
+async function loadStudent(user,enteredId){
+ if(!user.emailVerified)throw new Error("Please verify your email first.");
+
+ const email=user.email.toLowerCase();
+ const q=query(collection(db,"students"),where("email","==",email));
+ const result=await getDocs(q);
+
+ if(result.empty)throw new Error("Student record not found. Contact Admin.");
+
+ const student=result.docs[0].data();
+
+ const realId=String(student.studentId||student.id||"").toUpperCase();
+ const course=student.course||student.coures||"";
+
+ if(!enteredId||realId!==enteredId.toUpperCase()){
+  throw new Error("Student ID does not match this email.");
+ }
+
+ $("welcome").textContent="Welcome, "+(student.name||"Student")+"!";
+ $("studentId").textContent=realId||"—";
+ $("profileId").textContent=realId||"—";
+ $("studentName").textContent=student.name||"Student";
+ $("studentEmail").textContent=email;
+ $("studentPhone").textContent=student.phone||"Not provided";
+
+ $("courseName").textContent=course||"Not assigned";
+ $("homeCourse").textContent=course||"No course assigned";
+ $("courseTitle").textContent=course||"No course assigned";
+ $("profileCourse").textContent=course||"Not assigned";
+
+ $("courseDescription").textContent=course
+  ?"You are registered for this course at DEVZ ACADEMY."
+  :"Your Admin has not assigned a course yet.";
+
+ // Load lessons belonging to this student's course
+ await loadStudentLessons(course);
+
+ page("dashboard");
+ tab("home");
+}
+
+// LOGIN
+$("loginBtn").onclick=async()=>{
+ const id=$("loginId").value.trim().toUpperCase();
+ const email=$("loginEmail").value.trim().toLowerCase();
+ const password=$("loginPassword").value;
+
+ if(!id||!email||!password){
+  message("loginMsg","Enter Student ID, Email and Password.",true);return;
+ }
+
+ $("loginBtn").disabled=true;
+ $("loginBtn").textContent="SIGNING IN...";
+
+ try{
+  const result=await signInWithEmailAndPassword(auth,email,password);
+  await loadStudent(result.user,id);
+ }catch(e){
+  if(auth.currentUser)await signOut(auth);
+  message("loginMsg",e.message,true);
+ }finally{
+  $("loginBtn").disabled=false;
+  $("loginBtn").textContent="SIGN IN →";
+ }
+};
+
+// FORGOT PASSWORD
+$("forgotBtn").onclick=async()=>{
+ const email=$("loginEmail").value.trim().toLowerCase();
+ if(!email){
+  message("loginMsg","Enter your email address first.",true);return;
+ }
+ try{
+  await sendPasswordResetEmail(auth,email);
+  message("loginMsg","Password reset email sent. Check your inbox.");
+ }catch(e){
+  message("loginMsg",e.message,true);
+ }
+};
+
+// LOGOUT
+async function logout(){
+ await signOut(auth);
+ $("loginPassword").value="";
+ page("loginPage");
+}
+$("logoutBtn").onclick=logout;
+$("sideLogout").onclick=logout;
+
+// RESTORE SESSION
+onAuthStateChanged(auth,async user=>{
+ if(!user){
+  page("loginPage");
+  return;
+ }
+
+ if(!user.emailVerified){
+  await signOut(auth);
+  page("loginPage");
+  message("loginMsg","Please verify your email before signing in.",true);
+  return;
+ }
+
+ const enteredId=$("loginId").value.trim().toUpperCase();
+
+ if(!enteredId){
+  await signOut(auth);
+  page("loginPage");
+  return;
+ }
+
+ try{
+  await loadStudent(user,enteredId);
+ }catch(e){
+  await signOut(auth);
+  page("loginPage");
+  message("loginMsg",e.message,true);
+ }
+});
+</script>
+</body>
+   </html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090613">
+<title>DEVZ ACADEMY | Student Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+ --bg:#090613;--purple:#9b5cff;--pink:#d15cff;
+ --text:#fff;--muted:#aaa2b8;--border:#ffffff15;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;background:var(--bg);
+ color:var(--text);font-family:Inter,sans-serif;overflow-x:hidden
+}
+body:before,body:after{
+ content:"";position:fixed;width:350px;height:350px;
+ border-radius:50%;filter:blur(120px);opacity:.22;
+ pointer-events:none;z-index:-1
+}
+body:before{background:#7c35ff;top:-130px;left:-100px}
+body:after{background:#d12cff;bottom:-150px;right:-100px}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.app{max-width:1400px;margin:auto;padding:20px}
+.topbar{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:15px;padding:17px 22px;border:1px solid var(--border);
+ border-radius:20px;background:#ffffff09;backdrop-filter:blur(25px);
+ position:sticky;top:10px;z-index:20
+}
+.logo{font-family:Orbitron,sans-serif;font-weight:800;font-size:19px;letter-spacing:1px}
+.logo span{color:#bd8aff}
+.status{font-size:11px;color:#a9f4c5}
+.glass{
+ background:linear-gradient(140deg,#ffffff12,#ffffff05);
+ border:1px solid var(--border);border-radius:22px;
+ backdrop-filter:blur(22px);box-shadow:0 15px 50px #0005
+}
+.auth{max-width:460px;margin:65px auto;padding:32px}
+.tag{font-family:Orbitron,sans-serif;color:#c49aff;font-size:10px;letter-spacing:2px;font-weight:700}
+h1{font-size:29px;margin:12px 0}
+h2{font-size:20px;margin:0 0 18px}
+h3{font-size:17px}
+p{color:var(--muted);line-height:1.7;font-size:13px}
+.field{margin:18px 0}
+label{display:block;font-size:12px;color:#c5bdd2;margin-bottom:9px}
+input{
+ width:100%;padding:15px;background:#080611;
+ border:1px solid #ffffff20;border-radius:12px;color:white;outline:none
+}
+input:focus{border-color:var(--purple);box-shadow:0 0 15px #9b5cff35}
+.btn{
+ border:0;border-radius:12px;padding:14px 18px;color:white;
+ font-weight:800;background:linear-gradient(100deg,#7435e9,#bb55ed);
+ box-shadow:0 0 22px #974cff40;transition:.25s
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.full{width:100%;margin-top:8px}
+.btn2{border:1px solid #ffffff20;background:#ffffff09;color:white;border-radius:11px;padding:11px 15px}
+.link{color:#c59aff;cursor:pointer;font-size:12px}
+.message{font-size:12px;margin-top:15px;line-height:1.6;overflow-wrap:anywhere}
+.auth-footer{text-align:center;margin-top:20px}
+.layout{display:grid;grid-template-columns:235px 1fr;gap:22px;margin-top:24px}
+.sidebar{padding:20px;height:max-content;position:sticky;top:105px}
+.side-label{font-size:10px;color:#82798f;letter-spacing:2px;margin:12px 10px}
+.navbtn{
+ display:flex;align-items:center;gap:13px;width:100%;padding:14px;
+ margin:5px 0;background:transparent;border:1px solid transparent;
+ color:#bdb4ca;border-radius:12px;text-align:left;font-size:13px;font-weight:600
+}
+.navbtn:hover,.navbtn.active{color:white;background:#a15cff20;border-color:#a15cff55}
+.navbtn .ico{font-size:18px;width:22px}
+.content{min-width:0}
+.hero{padding:30px;position:relative;overflow:hidden}
+.hero h1{font-family:Orbitron,sans-serif;font-size:clamp(22px,4vw,34px);text-shadow:0 0 18px #a65cff75}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:18px}
+.stat{padding:21px;min-width:0}
+.stat-icon{font-size:23px}
+.stat small{display:block;color:#aaa;font-size:10px;margin-top:13px}
+.stat strong{display:block;margin-top:8px;font-size:17px;overflow-wrap:anywhere}
+.section{margin-top:20px;padding:25px}
+.item{padding:17px;margin-top:10px;background:#ffffff08;border:1px solid #ffffff12;border-radius:13px;overflow-wrap:anywhere}
+.course-card{
+ padding:25px;border:1px solid #a15cff55;border-radius:18px;
+ background:linear-gradient(130deg,#9b5cff20,#d15cff09)
+}
+.course-icon{font-size:35px}
+.pill{display:inline-block;padding:7px 11px;background:#9b5cff20;color:#cbaaff;border-radius:30px;font-size:10px;font-weight:700}
+.empty{text-align:center;padding:40px 20px;border:1px dashed #ffffff25;border-radius:17px}
+.empty .big{font-size:35px}
+.page{animation:appear .35s ease}
+@keyframes appear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.mobile-nav{display:none}
+.footer{text-align:center;color:#655c73;font-size:10px;padding:30px 0;letter-spacing:1px}
+
+/* LESSON CARDS */
+.lesson-card{
+ padding:20px;margin-top:14px;border-radius:17px;
+ background:linear-gradient(140deg,#ffffff10,#ffffff05);
+ border:1px solid #a15cff35;
+}
+.lesson-card h3{margin:10px 0 5px;font-size:16px}
+.lesson-card p{margin:8px 0 15px}
+.lesson-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.lesson-link{
+ display:inline-flex;align-items:center;gap:7px;
+ padding:11px 15px;border-radius:10px;text-decoration:none;
+ color:white;font-size:12px;font-weight:700;
+ background:linear-gradient(100deg,#7435e9,#bb55ed);
+}
+.lesson-link.pdf{background:#ffffff12;border:1px solid #ffffff25}
+.lesson-number{
+ display:inline-block;padding:6px 10px;border-radius:20px;
+ background:#9b5cff20;color:#d4baff;font-size:10px;font-weight:700;
+}
+.lesson-count{color:#a9f4c5;font-size:11px;margin-top:10px}
+
+@media(max-width:850px){
+ .layout{grid-template-columns:1fr}
+ .sidebar{display:none}
+ .mobile-nav{
+  display:flex;position:fixed;bottom:10px;left:10px;right:10px;
+  z-index:30;padding:8px;gap:4px;justify-content:space-around;
+  background:#171025ed;border:1px solid #ffffff20;border-radius:17px;
+  backdrop-filter:blur(25px)
+ }
+ .mobile-nav .navbtn{display:flex;flex-direction:column;gap:4px;padding:9px 4px;margin:0;text-align:center;font-size:9px}
+ .mobile-nav .ico{font-size:18px}
+ .footer{padding-bottom:90px}
+}
+@media(max-width:550px){
+ .app{padding:11px}.topbar{padding:14px}.logo{font-size:15px}
+ .auth{margin:35px auto;padding:23px}
+ .hero{padding:23px}.stats{grid-template-columns:1fr}
+ .stat{padding:17px}.section{padding:19px}
+ .top-right .status{display:none}
+ .lesson-card{padding:16px}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header class="topbar">
+ <div class="logo">DEVZ <span>ACADEMY</span></div>
+ <div class="top-right">
+  <span class="status">● STUDENT PORTAL</span>
+  <button id="logoutBtn" class="btn2 hidden">Logout ↗</button>
+ </div>
+</header>
+
+<section id="loginPage" class="glass auth">
+ <div class="tag">STUDENT ACCESS / 01</div>
+ <h1>Welcome Back.</h1>
+ <p>Sign in to continue your learning journey.</p>
+ <div class="field"><label>STUDENT ID</label><input id="loginId" placeholder="DEVZ-1001"></div>
+ <div class="field"><label>EMAIL ADDRESS</label><input id="loginEmail" type="email" placeholder="your@email.com"></div>
+ <div class="field"><label>PASSWORD</label><input id="loginPassword" type="password" placeholder="Enter password"></div>
+ <button id="loginBtn" class="btn full">SIGN IN →</button>
+ <p><span class="link" id="forgotBtn">Forgot Password?</span></p>
+ <div class="auth-footer"><p>New student? <span class="link" id="showRegister">Create Account</span></p></div>
+ <div id="loginMsg" class="message"></div>
+</section>
+
+<section id="registerPage" class="glass auth hidden">
+ <div class="tag">CREATE YOUR ACCOUNT / 02</div>
+ <h1>Join DEVZ.</h1>
+ <p>Use the Student ID and Email registered by your Admin.</p>
+ <div class="field"><label>STUDENT ID</label><input id="regId" placeholder="DEVZ-1001"></div>
+ <div class="field"><label>EMAIL ADDRESS</label><input id="regEmail" type="email" placeholder="your@email.com"></div>
+ <div class="field"><label>CREATE PASSWORD</label><input id="regPassword" type="password" placeholder="Minimum 6 characters"></div>
+ <button id="registerBtn" class="btn full">CREATE ACCOUNT →</button>
+ <div class="auth-footer"><p>Already have an account? <span class="link" id="showLogin">Sign In</span></p></div>
+ <div id="registerMsg" class="message"></div>
+</section>
+
+<section id="dashboard" class="hidden page">
+<div class="layout">
+
+<aside class="glass sidebar">
+ <div class="side-label">MAIN MENU</div>
+ <button class="navbtn active" data-page="home"><span class="ico">⌂</span> Dashboard</button>
+ <button class="navbtn" data-page="profile"><span class="ico">♙</span> My Profile</button>
+ <button class="navbtn" data-page="course"><span class="ico">▣</span> My Course</button>
+ <button class="navbtn" data-page="lessons"><span class="ico">▷</span> Lessons</button>
+ <button class="navbtn" data-page="payments"><span class="ico">◇</span> Payments</button>
+ <div class="side-label">ACCOUNT</div>
+ <button class="navbtn" id="sideLogout"><span class="ico">↗</span> Logout</button>
+</aside>
+
+<main class="content">
+
+<div id="homePage" class="page">
+ <div class="glass hero">
+  <div class="tag">YOUR LEARNING SPACE</div>
+  <h1 id="welcome">Welcome, Student.</h1>
+  <p>Your future starts with what you learn today.</p>
+  <span class="pill">✦ VERIFIED STUDENT</span>
+ </div>
+ <div class="stats">
+  <div class="glass stat"><div class="stat-icon">♙</div><small>STUDENT ID</small><strong id="studentId">—</strong></div>
+  <div class="glass stat"><div class="stat-icon">▣</div><small>MY COURSE</small><strong id="courseName">—</strong></div>
+  <div class="glass stat"><div class="stat-icon">✦</div><small>ACCOUNT STATUS</small><strong style="color:#9ef2c3">Verified</strong></div>
+ </div>
+ <div class="glass section">
+  <div class="tag">QUICK ACCESS</div><h2 style="margin-top:10px">Continue Learning</h2>
+  <div class="course-card">
+   <div class="course-icon">🎓</div>
+   <h3 id="homeCourse">Your Course</h3>
+   <p>Your assigned course information is available here.</p>
+   <button class="btn" data-go="course">VIEW COURSE →</button>
+  </div>
+ </div>
+</div>
+
+<div id="profilePage" class="glass section page hidden">
+ <div class="tag">PERSONAL INFORMATION</div><h2 style="margin-top:10px">My Profile</h2>
+ <div class="item">FULL NAME<br><strong id="studentName">—</strong></div>
+ <div class="item">EMAIL ADDRESS<br><strong id="studentEmail">—</strong></div>
+ <div class="item">STUDENT ID<br><strong id="profileId">—</strong></div>
+ <div class="item">ACCOUNT STATUS<br><strong style="color:#9ef2c3">Verified</strong></div>
+ <div class="item">REGISTERED COURSE<br><strong id="profileCourse">—</strong></div>
+ <div class="item">PHONE<br><strong id="studentPhone">—</strong></div>
+</div>
+
+<div id="coursePage" class="glass section page hidden">
+ <div class="tag">YOUR LEARNING PROGRAM</div><h2 style="margin-top:10px">My Course</h2>
+ <div class="course-card">
+  <div class="course-icon">🎓</div><span class="pill">ASSIGNED COURSE</span>
+  <h2 id="courseTitle" style="margin-top:15px">No course assigned</h2>
+  <p id="courseDescription">Your course details will appear here.</p>
+ </div>
+</div>
+
+<!-- CONNECTED LESSONS PAGE -->
+<div id="lessonsPage" class="glass section page hidden">
+ <div class="tag">LEARNING CENTER</div>
+ <h2 style="margin-top:10px">My Lessons</h2>
+ <p>Lessons and learning materials for your assigned course.</p>
+ <div class="lesson-count" id="lessonCount"></div>
+ <div id="lessonsList">
+  <div class="empty">
+   <div class="big">📚</div>
+   <h3>Loading Lessons...</h3>
+   <p>Your learning materials will appear here.</p>
+  </div>
+ </div>
+</div>
+
+<div id="paymentsPage" class="glass section page hidden">
+ <div class="tag">ACCOUNT & BILLING</div><h2 style="margin-top:10px">My Payments</h2>
+ <div id="paymentList">
+  <div class="empty"><div class="big">◇</div><h3>Payment Information</h3><p>Payment access has not been connected yet.</p></div>
+ </div>
+</div>
+
+</main>
+</div>
+
+<nav class="mobile-nav">
+ <button class="navbtn active" data-page="home"><span class="ico">⌂</span>Home</button>
+ <button class="navbtn" data-page="profile"><span class="ico">♙</span>Profile</button>
+ <button class="navbtn" data-page="course"><span class="ico">▣</span>Course</button>
+ <button class="navbtn" data-page="lessons"><span class="ico">▷</span>Lessons</button>
+ <button class="navbtn" data-page="payments"><span class="ico">◇</span>Payments</button>
+</nav>
+</section>
+
+<div class="footer">DEVZ ACADEMY • LEARN. CREATE. BUILD.</div>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+
+import {
+ getAuth,onAuthStateChanged,signInWithEmailAndPassword,
+ createUserWithEmailAndPassword,sendEmailVerification,
+ sendPasswordResetEmail,signOut
+} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
+
+import {
+ getFirestore,collection,query,where,getDocs
+} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyBKg28bMfUzMXX0zpA-nV8kOjaJ_JLyjbk",
+ authDomain:"devz-869b5.firebaseapp.com",
+ projectId:"devz-869b5",
+ storageBucket:"devz-869b5.firebasestorage.app",
+ messagingSenderId:"1026087949810",
+ appId:"1:1026087949810:web:a0de7d61fc11093c55076b",
+ measurementId:"G-ZM2SW9ZTF2"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const $=id=>document.getElementById(id);
+
+function message(id,text,error=false){
+ $(id).textContent=text;
+ $(id).style.color=error?"#ff8da5":"#a9f4c5";
+}
+
+function page(name){
+ ["loginPage","registerPage","dashboard"].forEach(id=>{
+  $(id).classList.toggle("hidden",id!==name);
+ });
+ $("logoutBtn").classList.toggle("hidden",name!=="dashboard");
+}
+
+function tab(name){
+ ["home","profile","course","lessons","payments"].forEach(p=>{
+  $(p+"Page").classList.toggle("hidden",p!==name);
+ });
+ document.querySelectorAll("[data-page]").forEach(b=>{
+  b.classList.toggle("active",b.dataset.page===name);
+ });
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.querySelectorAll("[data-page]").forEach(b=>{
+ b.addEventListener("click",()=>tab(b.dataset.page));
+});
+document.querySelectorAll("[data-go]").forEach(b=>{
+ b.addEventListener("click",()=>tab(b.dataset.go));
+});
+
+$("showRegister").onclick=()=>page("registerPage");
+$("showLogin").onclick=()=>page("loginPage");
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,char=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[char]));
+}
+
+function validWebURL(value){
+ try{
+  const url=new URL(value);
+  if(url.protocol==="https:"||url.protocol==="http:")return url.href;
+ }catch(e){}
+ return "";
+}
+
+// REGISTRATION
+$("registerBtn").onclick=async()=>{
+ const id=$("regId").value.trim().toUpperCase();
+ const email=$("regEmail").value.trim().toLowerCase();
+ const password=$("regPassword").value;
+
+ if(!id||!email||!password){
+  message("registerMsg","Please complete all fields.",true);return;
+ }
+ if(!/^DEVZ-\d+$/i.test(id)){
+  message("registerMsg","Invalid Student ID format.",true);return;
+ }
+ if(password.length<6){
+  message("registerMsg","Password must be at least 6 characters.",true);return;
+ }
+
+ $("registerBtn").disabled=true;
+ $("registerBtn").textContent="CREATING ACCOUNT...";
+
+ try{
+  const result=await createUserWithEmailAndPassword(auth,email,password);
+  await sendEmailVerification(result.user);
+  await signOut(auth);
+  $("loginId").value=id;
+  $("loginEmail").value=email;
+  page("loginPage");
+  message("loginMsg","Account created! Please verify your email using the link sent to your inbox.");
+ }catch(e){
+  message("registerMsg",e.message,true);
+ }finally{
+  $("registerBtn").disabled=false;
+  $("registerBtn").textContent="CREATE ACCOUNT →";
+ }
+};
+
+// LOAD LESSONS FOR THE STUDENT'S COURSE
+async function loadStudentLessons(course){
+ const list=$("lessonsList");
+ const count=$("lessonCount");
+
+ list.innerHTML=`
+  <div class="empty">
+   <div class="big">⏳</div>
+   <h3>Loading Lessons...</h3>
+   <p>Please wait while we load your learning materials.</p>
+  </div>`;
+ count.textContent="";
+
+ if(!course){
+  list.innerHTML=`
+   <div class="empty">
+    <div class="big">📚</div>
+    <h3>No Course Assigned</h3>
+    <p>Please contact your academy administrator.</p>
+   </div>`;
+  return;
+ }
+
+ try{
+  const lessonQuery=query(
+   collection(db,"lessons"),
+   where("course","==",course)
+  );
+
+  const result=await getDocs(lessonQuery);
+
+  if(result.empty){
+   list.innerHTML=`
+    <div class="empty">
+     <div class="big">📖</div>
+     <h3>No Lessons Yet</h3>
+     <p>Your teacher has not published lessons for ${escapeHTML(course)} yet. Please check again later.</p>
+    </div>`;
+   count.textContent="0 lessons available";
+   return;
+  }
+
+  const lessons=result.docs.map(d=>d.data());
+
+  lessons.sort((a,b)=>{
+   const timeA=a.createdAt?.toMillis?.()||0;
+   const timeB=b.createdAt?.toMillis?.()||0;
+   return timeA-timeB;
+  });
+
+  count.textContent=lessons.length+" lesson"+(lessons.length===1?"":"s")+" available";
+
+  list.innerHTML=lessons.map((lesson,index)=>{
+   const videoUrl=validWebURL(lesson.videoUrl||"");
+   const pdfUrl=validWebURL(lesson.pdfUrl||"");
+
+   return `
+    <article class="lesson-card">
+     <span class="lesson-number">LESSON ${index+1}</span>
+     <h3>${escapeHTML(lesson.title||"Untitled Lesson")}</h3>
+     <p>${escapeHTML(lesson.description||"No description provided.")}</p>
+
+     <div class="lesson-actions">
+      ${videoUrl?`
+       <a class="lesson-link" href="${escapeHTML(videoUrl)}" target="_blank" rel="noopener noreferrer">
+        ▶ WATCH VIDEO
+       </a>`:""}
+
+      ${pdfUrl?`
+       <a class="lesson-link pdf" href="${escapeHTML(pdfUrl)}" target="_blank" rel="noopener noreferrer">
+        ↓ OPEN PDF NOTES
+       </a>`:""}
+     </div>
+    </article>`;
+  }).join("");
+
+ }catch(error){
+  console.error("Lesson loading error:",error);
+  list.innerHTML=`
+   <div class="empty">
+    <div class="big">⚠️</div>
+    <h3>Unable to Load Lessons</h3>
+    <p>${escapeHTML(error.message)}</p>
+    <p>Please contact your academy administrator.</p>
+   </div>`;
+  count.textContent="";
+ }
+}
+
+// LOAD STUDENT PROFILE
+async function loadStudent(user,enteredId){
+ if(!user.emailVerified)throw new Error("Please verify your email first.");
+
+ const email=user.email.toLowerCase();
+ const q=query(collection(db,"students"),where("email","==",email));
+ const result=await getDocs(q);
+
+ if(result.empty)throw new Error("Student record not found. Contact Admin.");
+
+ const student=result.docs[0].data();
+
+ const realId=String(student.studentId||student.id||"").toUpperCase();
+ const course=student.course||student.coures||"";
+
+ if(!enteredId||realId!==enteredId.toUpperCase()){
+  throw new Error("Student ID does not match this email.");
+ }
+
+ $("welcome").textContent="Welcome, "+(student.name||"Student")+"!";
+ $("studentId").textContent=realId||"—";
+ $("profileId").textContent=realId||"—";
+ $("studentName").textContent=student.name||"Student";
+ $("studentEmail").textContent=email;
+ $("studentPhone").textContent=student.phone||"Not provided";
+
+ $("courseName").textContent=course||"Not assigned";
+ $("homeCourse").textContent=course||"No course assigned";
+ $("courseTitle").textContent=course||"No course assigned";
+ $("profileCourse").textContent=course||"Not assigned";
+
+ $("courseDescription").textContent=course
+  ?"You are registered for this course at DEVZ ACADEMY."
+  :"Your Admin has not assigned a course yet.";
+
+ // Load lessons belonging to this student's course
+ await loadStudentLessons(course);
+
+ page("dashboard");
+ tab("home");
+}
+
+// LOGIN
+$("loginBtn").onclick=async()=>{
+ const id=$("loginId").value.trim().toUpperCase();
+ const email=$("loginEmail").value.trim().toLowerCase();
+ const password=$("loginPassword").value;
+
+ if(!id||!email||!password){
+  message("loginMsg","Enter Student ID, Email and Password.",true);return;
+ }
+
+ $("loginBtn").disabled=true;
+ $("loginBtn").textContent="SIGNING IN...";
+
+ try{
+  const result=await signInWithEmailAndPassword(auth,email,password);
+  await loadStudent(result.user,id);
+ }catch(e){
+  if(auth.currentUser)await signOut(auth);
+  message("loginMsg",e.message,true);
+ }finally{
+  $("loginBtn").disabled=false;
+  $("loginBtn").textContent="SIGN IN →";
+ }
+};
+
+// FORGOT PASSWORD
+$("forgotBtn").onclick=async()=>{
+ const email=$("loginEmail").value.trim().toLowerCase();
+ if(!email){
+  message("loginMsg","Enter your email address first.",true);return;
+ }
+ try{
+  await sendPasswordResetEmail(auth,email);
+  message("loginMsg","Password reset email sent. Check your inbox.");
+ }catch(e){
+  message("loginMsg",e.message,true);
+ }
+};
+
+// LOGOUT
+async function logout(){
+ await signOut(auth);
+ $("loginPassword").value="";
+ page("loginPage");
+}
+$("logoutBtn").onclick=logout;
+$("sideLogout").onclick=logout;
+
+// RESTORE SESSION
+onAuthStateChanged(auth,async user=>{
+ if(!user){
+  page("loginPage");
+  return;
+ }
+
+ if(!user.emailVerified){
+  await signOut(auth);
+  page("loginPage");
+  message("loginMsg","Please verify your email before signing in.",true);
+  return;
+ }
+
+ const enteredId=$("loginId").value.trim().toUpperCase();
+
+ if(!enteredId){
+  await signOut(auth);
+  page("loginPage");
+  return;
+ }
+
+ try{
+  await loadStudent(user,enteredId);
+ }catch(e){
+  await signOut(auth);
+  page("loginPage");
+  message("loginMsg",e.message,true);
+ }
+});
+</script>
+</body>
+</htm<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090613">
+<title>DEVZ ACADEMY | Student Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+ --bg:#090613;--purple:#9b5cff;--pink:#d15cff;
+ --text:#fff;--muted:#aaa2b8;--border:#ffffff15;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;background:var(--bg);
+ color:var(--text);font-family:Inter,sans-serif;overflow-x:hidden
+}
+body:before,body:after{
+ content:"";position:fixed;width:350px;height:350px;
+ border-radius:50%;filter:blur(120px);opacity:.22;
+ pointer-events:none;z-index:-1
+}
+body:before{background:#7c35ff;top:-130px;left:-100px}
+body:after{background:#d12cff;bottom:-150px;right:-100px}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.app{max-width:1400px;margin:auto;padding:20px}
+.topbar{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:15px;padding:17px 22px;border:1px solid var(--border);
+ border-radius:20px;background:#ffffff09;backdrop-filter:blur(25px);
+ position:sticky;top:10px;z-index:20
+}
+.logo{font-family:Orbitron,sans-serif;font-weight:800;font-size:19px;letter-spacing:1px}
+.logo span{color:#bd8aff}
+.status{font-size:11px;color:#a9f4c5}
+.glass{
+ background:linear-gradient(140deg,#ffffff12,#ffffff05);
+ border:1px solid var(--border);border-radius:22px;
+ backdrop-filter:blur(22px);box-shadow:0 15px 50px #0005
+}
+.auth{max-width:460px;margin:65px auto;padding:32px}
+.tag{font-family:Orbitron,sans-serif;color:#c49aff;font-size:10px;letter-spacing:2px;font-weight:700}
+h1{font-size:29px;margin:12px 0}
+h2{font-size:20px;margin:0 0 18px}
+h3{font-size:17px}
+p{color:var(--muted);line-height:1.7;font-size:13px}
+.field{margin:18px 0}
+label{display:block;font-size:12px;color:#c5bdd2;margin-bottom:9px}
+input{
+ width:100%;padding:15px;background:#080611;
+ border:1px solid #ffffff20;border-radius:12px;color:white;outline:none
+}
+input:focus{border-color:var(--purple);box-shadow:0 0 15px #9b5cff35}
+.btn{
+ border:0;border-radius:12px;padding:14px 18px;color:white;
+ font-weight:800;background:linear-gradient(100deg,#7435e9,#bb55ed);
+ box-shadow:0 0 22px #974cff40;transition:.25s
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.full{width:100%;margin-top:8px}
+.btn2{border:1px solid #ffffff20;background:#ffffff09;color:white;border-radius:11px;padding:11px 15px}
+.link{color:#c59aff;cursor:pointer;font-size:12px}
+.message{font-size:12px;margin-top:15px;line-height:1.6;overflow-wrap:anywhere}
+.auth-footer{text-align:center;margin-top:20px}
+.layout{display:grid;grid-template-columns:235px 1fr;gap:22px;margin-top:24px}
+.sidebar{padding:20px;height:max-content;position:sticky;top:105px}
+.side-label{font-size:10px;color:#82798f;letter-spacing:2px;margin:12px 10px}
+.navbtn{
+ display:flex;align-items:center;gap:13px;width:100%;padding:14px;
+ margin:5px 0;background:transparent;border:1px solid transparent;
+ color:#bdb4ca;border-radius:12px;text-align:left;font-size:13px;font-weight:600
+}
+.navbtn:hover,.navbtn.active{color:white;background:#a15cff20;border-color:#a15cff55}
+.navbtn .ico{font-size:18px;width:22px}
+.content{min-width:0}
+.hero{padding:30px;position:relative;overflow:hidden}
+.hero h1{font-family:Orbitron,sans-serif;font-size:clamp(22px,4vw,34px);text-shadow:0 0 18px #a65cff75}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:18px}
+.stat{padding:21px;min-width:0}
+.stat-icon{font-size:23px}
+.stat small{display:block;color:#aaa;font-size:10px;margin-top:13px}
+.stat strong{display:block;margin-top:8px;font-size:17px;overflow-wrap:anywhere}
+.section{margin-top:20px;padding:25px}
+.item{padding:17px;margin-top:10px;background:#ffffff08;border:1px solid #ffffff12;border-radius:13px;overflow-wrap:anywhere}
+.course-card{
+ padding:25px;border:1px solid #a15cff55;border-radius:18px;
+ background:linear-gradient(130deg,#9b5cff20,#d15cff09)
+}
+.course-icon{font-size:35px}
+.pill{display:inline-block;padding:7px 11px;background:#9b5cff20;color:#cbaaff;border-radius:30px;font-size:10px;font-weight:700}
+.empty{text-align:center;padding:40px 20px;border:1px dashed #ffffff25;border-radius:17px}
+.empty .big{font-size:35px}
+.page{animation:appear .35s ease}
+@keyframes appear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.mobile-nav{display:none}
+.footer{text-align:center;color:#655c73;font-size:10px;padding:30px 0;letter-spacing:1px}
+
+/* LESSON CARDS */
+.lesson-card{
+ padding:20px;margin-top:14px;border-radius:17px;
+ background:linear-gradient(140deg,#ffffff10,#ffffff05);
+ border:1px solid #a15cff35;
+}
+.lesson-card h3{margin:10px 0 5px;font-size:16px}
+.lesson-card p{margin:8px 0 15px}
+.lesson-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.lesson-link{
+ display:inline-flex;align-items:center;gap:7px;
+ padding:11px 15px;border-radius:10px;text-decoration:none;
+ color:white;font-size:12px;font-weight:700;
+ background:linear-gradient(100deg,#7435e9,#bb55ed);
+}
+.lesson-link.pdf{background:#ffffff12;border:1px solid #ffffff25}
+.lesson-number{
+ display:inline-block;padding:6px 10px;border-radius:20px;
+ background:#9b5cff20;color:#d4baff;font-size:10px;font-weight:700;
+}
+.lesson-count{color:#a9f4c5;font-size:11px;margin-top:10px}
+
+@media(max-width:850px){
+ .layout{grid-template-columns:1fr}
+ .sidebar{display:none}
+ .mobile-nav{
+  display:flex;position:fixed;bottom:10px;left:10px;right:10px;
+  z-index:30;padding:8px;gap:4px;justify-content:space-around;
+  background:#171025ed;border:1px solid #ffffff20;border-radius:17px;
+  backdrop-filter:blur(25px)
+ }
+ .mobile-nav .navbtn{display:flex;flex-direction:column;gap:4px;padding:9px 4px;margin:0;text-align:center;font-size:9px}
+ .mobile-nav .ico{font-size:18px}
+ .footer{padding-bottom:90px}
+}
+@media(max-width:550px){
+ .app{padding:11px}.topbar{padding:14px}.logo{font-size:15px}
+ .auth{margin:35px auto;padding:23px}
+ .hero{padding:23px}.stats{grid-template-columns:1fr}
+ .stat{padding:17px}.section{padding:19px}
+ .top-right .status{display:none}
+ .lesson-card{padding:16px}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header class="topbar">
+ <div class="logo">DEVZ <span>ACADEMY</span></div>
+ <div class="top-right">
+  <span class="status">● STUDENT PORTAL</span>
+  <button id="logoutBtn" class="btn2 hidden">Logout ↗</button>
+ </div>
+</header>
+
+<section id="loginPage" class="glass auth">
+ <div class="tag">STUDENT ACCESS / 01</div>
+ <h1>Welcome Back.</h1>
+ <p>Sign in to continue your learning journey.</p>
+ <div class="field"><label>STUDENT ID</label><input id="loginId" placeholder="DEVZ-1001"></div>
+ <div class="field"><label>EMAIL ADDRESS</label><input id="loginEmail" type="email" placeholder="your@email.com"></div>
+ <div class="field"><label>PASSWORD</label><input id="loginPassword" type="password" placeholder="Enter password"></div>
+ <button id="loginBtn" class="btn full">SIGN IN →</button>
+ <p><span class="link" id="forgotBtn">Forgot Password?</span></p>
+ <div class="auth-footer"><p>New student? <span class="link" id="showRegister">Create Account</span></p></div>
+ <div id="loginMsg" class="message"></div>
+</section>
+
+<section id="registerPage" class="glass auth hidden">
+ <div class="tag">CREATE YOUR ACCOUNT / 02</div>
+ <h1>Join DEVZ.</h1>
+ <p>Use the Student ID and Email registered by your Admin.</p>
+ <div class="field"><label>STUDENT ID</label><input id="regId" placeholder="DEVZ-1001"></div>
+ <div class="field"><label>EMAIL ADDRESS</label><input id="regEmail" type="email" placeholder="your@email.com"></div>
+ <div class="field"><label>CREATE PASSWORD</label><input id="regPassword" type="password" placeholder="Minimum 6 characters"></div>
+ <button id="registerBtn" class="btn full">CREATE ACCOUNT →</button>
+ <div class="auth-footer"><p>Already have an account? <span class="link" id="showLogin">Sign In</span></p></div>
+ <div id="registerMsg" class="message"></div>
+</section>
+
+<section id="dashboard" class="hidden page">
+<div class="layout">
+
+<aside class="glass sidebar">
+ <div class="side-label">MAIN MENU</div>
+ <button class="navbtn active" data-page="home"><span class="ico">⌂</span> Dashboard</button>
+ <button class="navbtn" data-page="profile"><span class="ico">♙</span> My Profile</button>
+ <button class="navbtn" data-page="course"><span class="ico">▣</span> My Course</button>
+ <button class="navbtn" data-page="lessons"><span class="ico">▷</span> Lessons</button>
+ <button class="navbtn" data-page="payments"><span class="ico">◇</span> Payments</button>
+ <div class="side-label">ACCOUNT</div>
+ <button class="navbtn" id="sideLogout"><span class="ico">↗</span> Logout</button>
+</aside>
+
+<main class="content">
+
+<div id="homePage" class="page">
+ <div class="glass hero">
+  <div class="tag">YOUR LEARNING SPACE</div>
+  <h1 id="welcome">Welcome, Student.</h1>
+  <p>Your future starts with what you learn today.</p>
+  <span class="pill">✦ VERIFIED STUDENT</span>
+ </div>
+ <div class="stats">
+  <div class="glass stat"><div class="stat-icon">♙</div><small>STUDENT ID</small><strong id="studentId">—</strong></div>
+  <div class="glass stat"><div class="stat-icon">▣</div><small>MY COURSE</small><strong id="courseName">—</strong></div>
+  <div class="glass stat"><div class="stat-icon">✦</div><small>ACCOUNT STATUS</small><strong style="color:#9ef2c3">Verified</strong></div>
+ </div>
+ <div class="glass section">
+  <div class="tag">QUICK ACCESS</div><h2 style="margin-top:10px">Continue Learning</h2>
+  <div class="course-card">
+   <div class="course-icon">🎓</div>
+   <h3 id="homeCourse">Your Course</h3>
+   <p>Your assigned course information is available here.</p>
+   <button class="btn" data-go="course">VIEW COURSE →</button>
+  </div>
+ </div>
+</div>
+
+<div id="profilePage" class="glass section page hidden">
+ <div class="tag">PERSONAL INFORMATION</div><h2 style="margin-top:10px">My Profile</h2>
+ <div class="item">FULL NAME<br><strong id="studentName">—</strong></div>
+ <div class="item">EMAIL ADDRESS<br><strong id="studentEmail">—</strong></div>
+ <div class="item">STUDENT ID<br><strong id="profileId">—</strong></div>
+ <div class="item">ACCOUNT STATUS<br><strong style="color:#9ef2c3">Verified</strong></div>
+ <div class="item">REGISTERED COURSE<br><strong id="profileCourse">—</strong></div>
+ <div class="item">PHONE<br><strong id="studentPhone">—</strong></div>
+</div>
+
+<div id="coursePage" class="glass section page hidden">
+ <div class="tag">YOUR LEARNING PROGRAM</div><h2 style="margin-top:10px">My Course</h2>
+ <div class="course-card">
+  <div class="course-icon">🎓</div><span class="pill">ASSIGNED COURSE</span>
+  <h2 id="courseTitle" style="margin-top:15px">No course assigned</h2>
+  <p id="courseDescription">Your course details will appear here.</p>
+ </div>
+</div>
+
+<!-- CONNECTED LESSONS PAGE -->
+<div id="lessonsPage" class="glass section page hidden">
+ <div class="tag">LEARNING CENTER</div>
+ <h2 style="margin-top:10px">My Lessons</h2>
+ <p>Lessons and learning materials for your assigned course.</p>
+ <div class="lesson-count" id="lessonCount"></div>
+ <div id="lessonsList">
+  <div class="empty">
+   <div class="big">📚</div>
+   <h3>Loading Lessons...</h3>
+   <p>Your learning materials will appear here.</p>
+  </div>
+ </div>
+</div>
+
+<div id="paymentsPage" class="glass section page hidden">
+ <div class="tag">ACCOUNT & BILLING</div><h2 style="margin-top:10px">My Payments</h2>
+ <div id="paymentList">
+  <div class="empty"><div class="big">◇</div><h3>Payment Information</h3><p>Payment access has not been connected yet.</p></div>
+ </div>
+</div>
+
+</main>
+</div>
+
+<nav class="mobile-nav">
+ <button class="navbtn active" data-page="home"><span class="ico">⌂</span>Home</button>
+ <button class="navbtn" data-page="profile"><span class="ico">♙</span>Profile</button>
+ <button class="navbtn" data-page="course"><span class="ico">▣</span>Course</button>
+ <button class="navbtn" data-page="lessons"><span class="ico">▷</span>Lessons</button>
+ <button class="navbtn" data-page="payments"><span class="ico">◇</span>Payments</button>
+</nav>
+</section>
+
+<div class="footer">DEVZ ACADEMY • LEARN. CREATE. BUILD.</div>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+
+import {
+ getAuth,onAuthStateChanged,signInWithEmailAndPassword,
+ createUserWithEmailAndPassword,sendEmailVerification,
+ sendPasswordResetEmail,signOut
+} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
+
+import {
+ getFirestore,collection,query,where,getDocs
+} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyBKg28bMfUzMXX0zpA-nV8kOjaJ_JLyjbk",
+ authDomain:"devz-869b5.firebaseapp.com",
+ projectId:"devz-869b5",
+ storageBucket:"devz-869b5.firebasestorage.app",
+ messagingSenderId:"1026087949810",
+ appId:"1:1026087949810:web:a0de7d61fc11093c55076b",
+ measurementId:"G-ZM2SW9ZTF2"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const $=id=>document.getElementById(id);
+
+function message(id,text,error=false){
+ $(id).textContent=text;
+ $(id).style.color=error?"#ff8da5":"#a9f4c5";
+}
+
+function page(name){
+ ["loginPage","registerPage","dashboard"].forEach(id=>{
+  $(id).classList.toggle("hidden",id!==name);
+ });
+ $("logoutBtn").classList.toggle("hidden",name!=="dashboard");
+}
+
+function tab(name){
+ ["home","profile","course","lessons","payments"].forEach(p=>{
+  $(p+"Page").classList.toggle("hidden",p!==name);
+ });
+ document.querySelectorAll("[data-page]").forEach(b=>{
+  b.classList.toggle("active",b.dataset.page===name);
+ });
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.querySelectorAll("[data-page]").forEach(b=>{
+ b.addEventListener("click",()=>tab(b.dataset.page));
+});
+document.querySelectorAll("[data-go]").forEach(b=>{
+ b.addEventListener("click",()=>tab(b.dataset.go));
+});
+
+$("showRegister").onclick=()=>page("registerPage");
+$("showLogin").onclick=()=>page("loginPage");
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,char=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[char]));
+}
+
+function validWebURL(value){
+ try{
+  const url=new URL(value);
+  if(url.protocol==="https:"||url.protocol==="http:")return url.href;
+ }catch(e){}
+ return "";
+}
+
+// REGISTRATION
+$("registerBtn").onclick=async()=>{
+ const id=$("regId").value.trim().toUpperCase();
+ const email=$("regEmail").value.trim().toLowerCase();
+ const password=$("regPassword").value;
+
+ if(!id||!email||!password){
+  message("registerMsg","Please complete all fields.",true);return;
+ }
+ if(!/^DEVZ-\d+$/i.test(id)){
+  message("registerMsg","Invalid Student ID format.",true);return;
+ }
+ if(password.length<6){
+  message("registerMsg","Password must be at least 6 characters.",true);return;
+ }
+
+ $("registerBtn").disabled=true;
+ $("registerBtn").textContent="CREATING ACCOUNT...";
+
+ try{
+  const result=await createUserWithEmailAndPassword(auth,email,password);
+  await sendEmailVerification(result.user);
+  await signOut(auth);
+  $("loginId").value=id;
+  $("loginEmail").value=email;
+  page("loginPage");
+  message("loginMsg","Account created! Please verify your email using the link sent to your inbox.");
+ }catch(e){
+  message("registerMsg",e.message,true);
+ }finally{
+  $("registerBtn").disabled=false;
+  $("registerBtn").textContent="CREATE ACCOUNT →";
+ }
+};
+
+// LOAD LESSONS FOR THE STUDENT'S COURSE
+async function loadStudentLessons(course){
+ const list=$("lessonsList");
+ const count=$("lessonCount");
+
+ list.innerHTML=`
+  <div class="empty">
+   <div class="big">⏳</div>
+   <h3>Loading Lessons...</h3>
+   <p>Please wait while we load your learning materials.</p>
+  </div>`;
+ count.textContent="";
+
+ if(!course){
+  list.innerHTML=`
+   <div class="empty">
+    <div class="big">📚</div>
+    <h3>No Course Assigned</h3>
+    <p>Please contact your academy administrator.</p>
+   </div>`;
+  return;
+ }
+
+ try{
+  const lessonQuery=query(
+   collection(db,"lessons"),
+   where("course","==",course)
+  );
+
+  const result=await getDocs(lessonQuery);
+
+  if(result.empty){
+   list.innerHTML=`
+    <div class="empty">
+     <div class="big">📖</div>
+     <h3>No Lessons Yet</h3>
+     <p>Your teacher has not published lessons for ${escapeHTML(course)} yet. Please check again later.</p>
+    </div>`;
+   count.textContent="0 lessons available";
+   return;
+  }
+
+  const lessons=result.docs.map(d=>d.data());
+
+  lessons.sort((a,b)=>{
+   const timeA=a.createdAt?.toMillis?.()||0;
+   const timeB=b.createdAt?.toMillis?.()||0;
+   return timeA-timeB;
+  });
+
+  count.textContent=lessons.length+" lesson"+(lessons.length===1?"":"s")+" available";
+
+  list.innerHTML=lessons.map((lesson,index)=>{
+   const videoUrl=validWebURL(lesson.videoUrl||"");
+   const pdfUrl=validWebURL(lesson.pdfUrl||"");
+
+   return `
+    <article class="lesson-card">
+     <span class="lesson-number">LESSON ${index+1}</span>
+     <h3>${escapeHTML(lesson.title||"Untitled Lesson")}</h3>
+     <p>${escapeHTML(lesson.description||"No description provided.")}</p>
+
+     <div class="lesson-actions">
+      ${videoUrl?`
+       <a class="lesson-link" href="${escapeHTML(videoUrl)}" target="_blank" rel="noopener noreferrer">
+        ▶ WATCH VIDEO
+       </a>`:""}
+
+      ${pdfUrl?`
+       <a class="lesson-link pdf" href="${escapeHTML(pdfUrl)}" target="_blank" rel="noopener noreferrer">
+        ↓ OPEN PDF NOTES
+       </a>`:""}
+     </div>
+    </article>`;
+  }).join("");
+
+ }catch(error){
+  console.error("Lesson loading error:",error);
+  list.innerHTML=`
+   <div class="empty">
+    <div class="big">⚠️</div>
+    <h3>Unable to Load Lessons</h3>
+    <p>${escapeHTML(error.message)}</p>
+    <p>Please contact your academy administrator.</p>
+   </div>`;
+  count.textContent="";
+ }
+}
+
+// LOAD STUDENT PROFILE
+async function loadStudent(user,enteredId){
+ if(!user.emailVerified)throw new Error("Please verify your email first.");
+
+ const email=user.email.toLowerCase();
+ const q=query(collection(db,"students"),where("email","==",email));
+ const result=await getDocs(q);
+
+ if(result.empty)throw new Error("Student record not found. Contact Admin.");
+
+ const student=result.docs[0].data();
+
+ const realId=String(student.studentId||student.id||"").toUpperCase();
+ const course=student.course||student.coures||"";
+
+ if(!enteredId||realId!==enteredId.toUpperCase()){
+  throw new Error("Student ID does not match this email.");
+ }
+
+ $("welcome").textContent="Welcome, "+(student.name||"Student")+"!";
+ $("studentId").textContent=realId||"—";
+ $("profileId").textContent=realId||"—";
+ $("studentName").textContent=student.name||"Student";
+ $("studentEmail").textContent=email;
+ $("studentPhone").textContent=student.phone||"Not provided";
+
+ $("courseName").textContent=course||"Not assigned";
+ $("homeCourse").textContent=course||"No course assigned";
+ $("courseTitle").textContent=course||"No course assigned";
+ $("profileCourse").textContent=course||"Not assigned";
+
+ $("courseDescription").textContent=course
+  ?"You are registered for this course at DEVZ ACADEMY."
+  :"Your Admin has not assigned a course yet.";
+
+ // Load lessons belonging to this student's course
+ await loadStudentLessons(course);
+
+ page("dashboard");
+ tab("home");
+}
+
+// LOGIN
+$("loginBtn").onclick=async()=>{
+ const id=$("loginId").value.trim().toUpperCase();
+ const email=$("loginEmail").value.trim().toLowerCase();
+ const password=$("loginPassword").value;
+
+ if(!id||!email||!password){
+  message("loginMsg","Enter Student ID, Email and Password.",true);return;
+ }
+
+ $("loginBtn").disabled=true;
+ $("loginBtn").textContent="SIGNING IN...";
+
+ try{
+  const result=await signInWithEmailAndPassword(auth,email,password);
+  await loadStudent(result.user,id);
+ }catch(e){
+  if(auth.currentUser)await signOut(auth);
+  message("loginMsg",e.message,true);
+ }finally{
+  $("loginBtn").disabled=false;
+  $("loginBtn").textContent="SIGN IN →";
+ }
+};
+
+// FORGOT PASSWORD
+$("forgotBtn").onclick=async()=>{
+ const email=$("loginEmail").value.trim().toLowerCase();
+ if(!email){
+  message("loginMsg","Enter your email address first.",true);return;
+ }
+ try{
+  await sendPasswordResetEmail(auth,email);
+  message("loginMsg","Password reset email sent. Check your inbox.");
+ }catch(e){
+  message("loginMsg",e.message,true);
+ }
+};
+
+// LOGOUT
+async function logout(){
+ await signOut(auth);
+ $("loginPassword").value="";
+ page("loginPage");
+}
+$("logoutBtn").onclick=logout;
+$("sideLogout").onclick=logout;
+
+// RESTORE SESSION
+onAuthStateChanged(auth,async user=>{
+ if(!user){
+  page("loginPage");
+  return;
+ }
+
+ if(!user.emailVerified){
+  await signOut(auth);
+  page("loginPage");
+  message("loginMsg","Please verify your email before signing in.",true);
+  return;
+ }
+
+ const enteredId=$("loginId").value.trim().toUpperCase();
+
+ if(!enteredId){
+  await signOut(auth);
+  page("loginPage");
+  return;
+ }
+
+ try{
+  await loadStudent(user,enteredId);
+ }catch(e){
+  await signOut(auth);
+  page("loginPage");
+  message("loginMsg",e.message,true);
+ }
+});
+</script>
+</body>
+  </html>
